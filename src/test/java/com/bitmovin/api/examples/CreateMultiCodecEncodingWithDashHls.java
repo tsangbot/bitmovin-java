@@ -5,12 +5,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 import com.bitmovin.api.AbstractApiResponse;
 import com.bitmovin.api.BitmovinApi;
@@ -37,6 +35,7 @@ import com.bitmovin.api.encoding.encodings.streams.Stream;
 import com.bitmovin.api.encoding.enums.CloudRegion;
 import com.bitmovin.api.encoding.enums.DashMuxingType;
 import com.bitmovin.api.encoding.enums.StreamSelectionMode;
+import com.bitmovin.api.encoding.inputs.HttpsInput;
 import com.bitmovin.api.encoding.inputs.S3Input;
 import com.bitmovin.api.encoding.manifest.Manifest;
 import com.bitmovin.api.encoding.manifest.dash.AdaptationSet;
@@ -60,23 +59,27 @@ import com.bitmovin.api.exceptions.BitmovinApiException;
 import com.bitmovin.api.http.RestException;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  * Created by Germano Fronza on 13.12.17.
  *
  */
 public class CreateMultiCodecEncodingWithDashHls
 {
-    private static String S3_INPUT_ACCESSKEY = "<INSERT_YOUR_ACCESS_KEY>";
-    private static String S3_INPUT_SECRET_KEY = "<INSERT_YOUR_ACCESS_KEY>";
-    private static String S3_INPUT_BUCKET_NAME = "<INSERT_YOUR_BUCKET_NAME>";
-    private static String S3_INPUT_PATH = "path/to/input.mp4";
+    private static String ENCODING_JOB_NAME = "Java MultiCodec example" + new Date().getTime();
+    
+    private static String S3_INPUT_ID = "e99fd3d3-b196-4817-8269-4590562ca98a"; // Reuse Input set in bitmovin
+    private static String S3_INPUT_PATH = "/inputs/SampleVideo_1280x720_5mb.mp4";
 
-    private static String S3_OUTPUT_ACCESSKEY = "<INSERT_YOUR_ACCESS_KEY>";
-    private static String S3_OUTPUT_SECRET_KEY = "<INSERT_YOUR_SECRET_KEY>";
-    private static String S3_OUTPUT_BUCKET_NAME = "<INSERT_YOUR_BUCKET_NAME>";
-    private static String OUTPUT_BASE_PATH = "path/to/output/";
+    private static String S3_OUTPUT_ACCESSKEY = "AKIAIJMKKCK5H3JTBIUA";
+    private static String S3_OUTPUT_SECRET_KEY = "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";
+    private static String S3_OUTPUT_BUCKET_NAME = "bitmovin-encode-outputs";
+    
+    private static String OUTPUT_BASE_PATH =  "outputs/" + ENCODING_JOB_NAME + "/";
 
-    private static final String API_KEY = "<INSERT_YOUR_API_KEY>";
+    private static final String API_KEY = "d8e098d1-85e3-4b49-aa13-f8ac8acb443c";
     private static final CloudRegion CLOUD_REGION = CloudRegion.AWS_EU_WEST_1;
 
     private static final double MUXING_SEGMENT_DURATION = 4.0;
@@ -118,22 +121,21 @@ public class CreateMultiCodecEncodingWithDashHls
         bitmovinApi = new BitmovinApi(API_KEY);
 
         Encoding encoding = new Encoding();
-        encoding.setName("Java MultiCodec example");
+        encoding.setName(ENCODING_JOB_NAME);
         encoding.setCloudRegion(CLOUD_REGION);
         encoding = bitmovinApi.encoding.create(encoding);
+        
+        //inputs
+        // HttpsInput input = bitmovinApi.input.https.get(HTTPS_INPUT_ID); // input id
+        S3Input input = bitmovinApi.input.s3.get(S3_INPUT_ID); // input id
 
-        S3Input input = new S3Input();
-        input.setAccessKey(S3_INPUT_ACCESSKEY);
-        input.setSecretKey(S3_INPUT_SECRET_KEY);
-        input.setBucketName(S3_INPUT_BUCKET_NAME);
-        input = bitmovinApi.input.s3.create(input);
-
+        //outputs
         S3Output output = new S3Output();
         output.setAccessKey(S3_OUTPUT_ACCESSKEY);
         output.setSecretKey(S3_OUTPUT_SECRET_KEY);
         output.setBucketName(S3_OUTPUT_BUCKET_NAME);
         output = bitmovinApi.output.s3.create(output);
-
+        
         InputStream inputStreamVideo = new InputStream();
         inputStreamVideo.setInputPath(S3_INPUT_PATH);
         inputStreamVideo.setInputId(input.getId());

@@ -1,5 +1,11 @@
 package com.bitmovin.api.examples;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+
 import com.bitmovin.api.BitmovinApi;
 import com.bitmovin.api.encoding.AclEntry;
 import com.bitmovin.api.encoding.AclPermission;
@@ -16,7 +22,7 @@ import com.bitmovin.api.encoding.encodings.streams.Stream;
 import com.bitmovin.api.encoding.enums.CloudRegion;
 import com.bitmovin.api.encoding.enums.DashMuxingType;
 import com.bitmovin.api.encoding.enums.StreamSelectionMode;
-import com.bitmovin.api.encoding.inputs.HttpsInput;
+import com.bitmovin.api.encoding.inputs.S3Input;
 import com.bitmovin.api.encoding.manifest.dash.AdaptationSet;
 import com.bitmovin.api.encoding.manifest.dash.AudioAdaptationSet;
 import com.bitmovin.api.encoding.manifest.dash.DashFmp4Representation;
@@ -34,29 +40,30 @@ import com.bitmovin.api.enums.Status;
 import com.bitmovin.api.exceptions.BitmovinApiException;
 import com.bitmovin.api.http.RestException;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 
 /**
  * Created by Roland Kersche on 01.06.17.
  */
 public class CreateSimpleEncoding
 {
-    private static String ApiKey = "<INSERT_YOUR_APIKEY>";
+    private static String ApiKey = "d8e098d1-85e3-4b49-aa13-f8ac8acb443c";
 
     private static CloudRegion cloudRegion = CloudRegion.AWS_EU_WEST_1;
-    private static String HTTPS_INPUT_HOST = "<INSERT_YOUR_HTTP_HOST>"; // ex.: storage.googleapis.com/
-    private static String HTTPS_INPUT_PATH = "<INSERT_YOUR_PATH_TO_INPUT_FILE>";
-    private static String S3_OUTPUT_ACCESSKEY = "<INSERT_YOUR_ACCESSKEY>";
-    private static String S3_OUTPUT_SECRET_KEY = "<INSERT_YOUR_SECRETKEY>";
-    private static String S3_OUTPUT_BUCKET_NAME = "BUCKET_NAME";
-    private static String OUTPUT_BASE_PATH = "path/to/your/outputs/" + new Date().getTime();
+    
+    // private static String HTTPS_INPUT_ID = "aeb6b9b2-434f-45e3-ac8e-c12823ac550e";
+    // private static String HTTPS_INPUT_PATH = "/video/mp4/720/big_buck_bunny_720p_5mb.mp4"; ///video/mp4/720/big_buck_bunny_720p_30mb.mp4
+    
+    private static String S3_INPUT_ID = "e99fd3d3-b196-4817-8269-4590562ca98a"; // Reuse Input set in bitmovin
+    private static String S3_INPUT_PATH = "/inputs/SampleVideo_1280x720_5mb.mp4";
+
+    private static String S3_OUTPUT_ACCESSKEY = "AKIAIJMKKCK5H3JTBIUA";
+    private static String S3_OUTPUT_SECRET_KEY = "l5oGormoaDymdkXsrtm2Nyacin/2Q3HFP0/TzWAk";
+    private static String S3_OUTPUT_BUCKET_NAME = "bitmovin-encode-outputs";
+    
+    private static String OUTPUT_BASE_PATH = "outputs/" + new Date().getTime() + "/";
 
     private static BitmovinApi bitmovinApi;
 
@@ -70,9 +77,9 @@ public class CreateSimpleEncoding
         encoding.setCloudRegion(cloudRegion);
         encoding = bitmovinApi.encoding.create(encoding);
 
-        HttpsInput input = new HttpsInput();
-        input.setHost(HTTPS_INPUT_HOST);
-        input = bitmovinApi.input.https.create(input);
+        S3Input input = bitmovinApi.input.s3.get(S3_INPUT_ID); // input id
+
+        // HttpsInput input = bitmovinApi.input.https.get(HTTPS_INPUT_ID); // input id
 
         S3Output output = new S3Output();
         output.setAccessKey(S3_OUTPUT_ACCESSKEY);
@@ -116,13 +123,13 @@ public class CreateSimpleEncoding
         videoConfiguration1080p = bitmovinApi.configuration.videoH264.create(videoConfiguration1080p);
 
         InputStream inputStreamAudio = new InputStream();
-        inputStreamAudio.setInputPath(HTTPS_INPUT_PATH);
+        inputStreamAudio.setInputPath(S3_INPUT_PATH);
         inputStreamAudio.setInputId(input.getId());
         inputStreamAudio.setSelectionMode(StreamSelectionMode.AUTO);
         inputStreamAudio.setPosition(0);
 
         InputStream inputStreamVideo = new InputStream();
-        inputStreamVideo.setInputPath(HTTPS_INPUT_PATH);
+        inputStreamVideo.setInputPath(S3_INPUT_PATH);
         inputStreamVideo.setInputId(input.getId());
         inputStreamVideo.setSelectionMode(StreamSelectionMode.AUTO);
         inputStreamVideo.setPosition(0);
