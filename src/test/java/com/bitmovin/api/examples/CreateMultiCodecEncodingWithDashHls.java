@@ -68,7 +68,7 @@ import org.junit.Test;
  */
 public class CreateMultiCodecEncodingWithDashHls
 {
-    private static String ENCODING_JOB_NAME = "Java MultiCodec example" + new Date().getTime();
+    private static String ENCODING_JOB_NAME = "Java MultiCodec example " + new Date().getTime();
     
    // private static String HTTPS_INPUT_ID = "aeb6b9b2-434f-45e3-ac8e-c12823ac550e";
     // private static String HTTPS_INPUT_PATH = "/video/mp4/720/big_buck_bunny_720p_5mb.mp4"; ///video/mp4/720/big_buck_bunny_720p_30mb.mp4
