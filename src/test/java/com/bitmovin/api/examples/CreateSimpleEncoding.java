@@ -56,13 +56,14 @@ public class CreateSimpleEncoding
     // private static String HTTPS_INPUT_ID = "aeb6b9b2-434f-45e3-ac8e-c12823ac550e";
     // private static String HTTPS_INPUT_PATH = "/video/mp4/720/big_buck_bunny_720p_5mb.mp4"; ///video/mp4/720/big_buck_bunny_720p_30mb.mp4
     
-    private static String S3_INPUT_ID = "e99fd3d3-b196-4817-8269-4590562ca98a"; // Reuse Input set in bitmovin
+    private static String S3_INPUT_ID = "d9de38f7-47ac-4097-a640-1f355f619be7"; // Reuse Input set in bitmovin
     private static String S3_INPUT_PATH = "/inputs/SampleVideo_1280x720_5mb.mp4";
 
-    private static String S3_OUTPUT_ACCESSKEY = "AKIAIJMKKCK5H3JTBIUA";
-    private static String S3_OUTPUT_SECRET_KEY = "l5oGormoaDymdkXsrtm2Nyacin/2Q3HFP0/TzWAk";
-    private static String S3_OUTPUT_BUCKET_NAME = "bitmovin-encode-outputs";
+    // private static String S3_OUTPUT_ACCESSKEY = "replace_key";
+    // private static String S3_OUTPUT_SECRET_KEY = "replace_key";
+    // private static String S3_OUTPUT_BUCKET_NAME = "bitmovin-encode-outputs";
     
+    private static String S3_OUTPUT_ID ="a3881e62-03f5-482b-8f8a-6ac8603f0c83";
     private static String OUTPUT_BASE_PATH = "outputs/" + new Date().getTime() + "/";
 
     private static BitmovinApi bitmovinApi;
@@ -77,15 +78,19 @@ public class CreateSimpleEncoding
         encoding.setCloudRegion(cloudRegion);
         encoding = bitmovinApi.encoding.create(encoding);
 
+        // Inputs
+        // HttpsInput input = bitmovinApi.input.https.get(HTTPS_INPUT_ID); // input id
         S3Input input = bitmovinApi.input.s3.get(S3_INPUT_ID); // input id
 
-        // HttpsInput input = bitmovinApi.input.https.get(HTTPS_INPUT_ID); // input id
+        // Outputs
+        // S3Output output = new S3Output();
+        // output.setAccessKey(S3_OUTPUT_ACCESSKEY);
+        // output.setSecretKey(S3_OUTPUT_SECRET_KEY);
+        // output.setBucketName(S3_OUTPUT_BUCKET_NAME);
+        // output = bitmovinApi.output.s3.create(output);
 
-        S3Output output = new S3Output();
-        output.setAccessKey(S3_OUTPUT_ACCESSKEY);
-        output.setSecretKey(S3_OUTPUT_SECRET_KEY);
-        output.setBucketName(S3_OUTPUT_BUCKET_NAME);
-        output = bitmovinApi.output.s3.create(output);
+        S3Output output = bitmovinApi.output.s3.get(S3_OUTPUT_ID);
+        
 
         AACAudioConfig aacConfiguration = new AACAudioConfig();
         aacConfiguration.setBitrate(128000L);
