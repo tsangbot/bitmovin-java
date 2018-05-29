@@ -47,30 +47,35 @@ import org.junit.Test;
 /**
  * Created by Roland Kersche on 01.06.17.
  */
-public class CreateSimpleEncoding
-{
+public class CreateSimpleEncoding {
     private static String ApiKey = "d8e098d1-85e3-4b49-aa13-f8ac8acb443c";
 
     private static CloudRegion cloudRegion = CloudRegion.AWS_EU_WEST_1;
-    
+
     // private static String HTTPS_INPUT_ID = "aeb6b9b2-434f-45e3-ac8e-c12823ac550e";
     // private static String HTTPS_INPUT_PATH = "/video/mp4/720/big_buck_bunny_720p_5mb.mp4"; ///video/mp4/720/big_buck_bunny_720p_30mb.mp4
-    
+
     private static String S3_INPUT_ID = "d9de38f7-47ac-4097-a640-1f355f619be7"; // Reuse Input set in bitmovin
     private static String S3_INPUT_PATH = "/inputs/SampleVideo_1280x720_5mb.mp4";
 
     // private static String S3_OUTPUT_ACCESSKEY = "replace_key";
     // private static String S3_OUTPUT_SECRET_KEY = "replace_key";
     // private static String S3_OUTPUT_BUCKET_NAME = "bitmovin-encode-outputs";
-    
-    private static String S3_OUTPUT_ID ="a3881e62-03f5-482b-8f8a-6ac8603f0c83";
+
+    private static String S3_OUTPUT_ID = "a3881e62-03f5-482b-8f8a-6ac8603f0c83";
     private static String OUTPUT_BASE_PATH = "outputs/" + new Date().getTime() + "/";
+
+    private static String AAC_CONFIGURATION_ID = "75ca5002-8421-4f45-ac43-81b769cbac85";
+    private static String VIDEO_CONFIGURATION_240P = "117fdc8a-0ba1-4167-aec8-04b4a68f6621";
+    private static String VIDEO_CONFIGURATION_360P = "3c85bb0f-cf81-42ff-a9a2-af66b1669c25";
+    private static String VIDEO_CONFIGURATION_480P = "3fe80992-7ab3-4fc4-8de9-90886185021d";
+    private static String VIDEO_CONFIGURATION_720P = "734257a8-583e-4517-beb1-7d697f23f0a5";
+    private static String VIDEO_CONFIGURATION_1080P = "da83d8e4-0aef-42d9-aa57-f0406a4e85ac";
 
     private static BitmovinApi bitmovinApi;
 
     @Test
-    public void testEncoding() throws IOException, BitmovinApiException, UnirestException, URISyntaxException, RestException, InterruptedException
-    {
+    public void testEncoding() throws IOException, BitmovinApiException, UnirestException, URISyntaxException, RestException, InterruptedException {
         bitmovinApi = new BitmovinApi(ApiKey);
 
         Encoding encoding = new Encoding();
@@ -90,42 +95,50 @@ public class CreateSimpleEncoding
         // output = bitmovinApi.output.s3.create(output);
 
         S3Output output = bitmovinApi.output.s3.get(S3_OUTPUT_ID);
-        
 
-        AACAudioConfig aacConfiguration = new AACAudioConfig();
-        aacConfiguration.setBitrate(128000L);
-        aacConfiguration.setRate(48000f);
-        aacConfiguration = bitmovinApi.configuration.audioAAC.create(aacConfiguration);
 
-        H264VideoConfiguration videoConfiguration240p = new H264VideoConfiguration();
-        videoConfiguration240p.setHeight(240);
-        videoConfiguration240p.setBitrate(400000L);
-        videoConfiguration240p.setProfile(ProfileH264.HIGH);
-        videoConfiguration240p = bitmovinApi.configuration.videoH264.create(videoConfiguration240p);
+//        AACAudioConfig aacConfiguration = new AACAudioConfig();
+//        aacConfiguration.setBitrate(128000L);
+//        aacConfiguration.setRate(48000f);
+//        aacConfiguration = bitmovinApi.configuration.audioAAC.create(aacConfiguration);
 
-        H264VideoConfiguration videoConfiguration360p = new H264VideoConfiguration();
-        videoConfiguration360p.setHeight(360);
-        videoConfiguration360p.setBitrate(800000L);
-        videoConfiguration360p.setProfile(ProfileH264.HIGH);
-        videoConfiguration360p = bitmovinApi.configuration.videoH264.create(videoConfiguration360p);
+        AACAudioConfig aacConfiguration = bitmovinApi.configuration.audioAAC.get(AAC_CONFIGURATION_ID);
+        H264VideoConfiguration videoConfiguration240p = bitmovinApi.configuration.videoH264.get(VIDEO_CONFIGURATION_240P);
+        H264VideoConfiguration videoConfiguration360p = bitmovinApi.configuration.videoH264.get(VIDEO_CONFIGURATION_360P);
+        H264VideoConfiguration videoConfiguration480p = bitmovinApi.configuration.videoH264.get(VIDEO_CONFIGURATION_480P);
+        H264VideoConfiguration videoConfiguration720p = bitmovinApi.configuration.videoH264.get(VIDEO_CONFIGURATION_720P);
+        H264VideoConfiguration videoConfiguration1080p = bitmovinApi.configuration.videoH264.get(VIDEO_CONFIGURATION_1080P);
 
-        H264VideoConfiguration videoConfiguration480p = new H264VideoConfiguration();
-        videoConfiguration480p.setHeight(480);
-        videoConfiguration480p.setBitrate(1200000L);
-        videoConfiguration480p.setProfile(ProfileH264.HIGH);
-        videoConfiguration480p = bitmovinApi.configuration.videoH264.create(videoConfiguration480p);
 
-        H264VideoConfiguration videoConfiguration720p = new H264VideoConfiguration();
-        videoConfiguration720p.setHeight(720);
-        videoConfiguration720p.setBitrate(2400000L);
-        videoConfiguration720p.setProfile(ProfileH264.HIGH);
-        videoConfiguration720p = bitmovinApi.configuration.videoH264.create(videoConfiguration720p);
+//        H264VideoConfiguration videoConfiguration240p = new H264VideoConfiguration();
+//        videoConfiguration240p.setHeight(240);
+//        videoConfiguration240p.setBitrate(400000L);
+//        videoConfiguration240p.setProfile(ProfileH264.HIGH);
+//        videoConfiguration240p = bitmovinApi.configuration.videoH264.create(videoConfiguration240p);
 
-        H264VideoConfiguration videoConfiguration1080p = new H264VideoConfiguration();
-        videoConfiguration1080p.setHeight(1080);
-        videoConfiguration1080p.setBitrate(4800000L);
-        videoConfiguration1080p.setProfile(ProfileH264.HIGH);
-        videoConfiguration1080p = bitmovinApi.configuration.videoH264.create(videoConfiguration1080p);
+//        H264VideoConfiguration videoConfiguration360p = new H264VideoConfiguration();
+//        videoConfiguration360p.setHeight(360);
+//        videoConfiguration360p.setBitrate(800000L);
+//        videoConfiguration360p.setProfile(ProfileH264.HIGH);
+//        videoConfiguration360p = bitmovinApi.configuration.videoH264.create(videoConfiguration360p);
+
+//        H264VideoConfiguration videoConfiguration480p = new H264VideoConfiguration();
+//        videoConfiguration480p.setHeight(480);
+//        videoConfiguration480p.setBitrate(1200000L);
+//        videoConfiguration480p.setProfile(ProfileH264.HIGH);
+//        videoConfiguration480p = bitmovinApi.configuration.videoH264.create(videoConfiguration480p);
+
+//        H264VideoConfiguration videoConfiguration720p = new H264VideoConfiguration();
+//        videoConfiguration720p.setHeight(720);
+//        videoConfiguration720p.setBitrate(2400000L);
+//        videoConfiguration720p.setProfile(ProfileH264.HIGH);
+//        videoConfiguration720p = bitmovinApi.configuration.videoH264.create(videoConfiguration720p);
+//
+//        H264VideoConfiguration videoConfiguration1080p = new H264VideoConfiguration();
+//        videoConfiguration1080p.setHeight(1080);
+//        videoConfiguration1080p.setBitrate(4800000L);
+//        videoConfiguration1080p.setProfile(ProfileH264.HIGH);
+//        videoConfiguration1080p = bitmovinApi.configuration.videoH264.create(videoConfiguration1080p);
 
         InputStream inputStreamAudio = new InputStream();
         inputStreamAudio.setInputPath(S3_INPUT_PATH);
@@ -191,16 +204,14 @@ public class CreateSimpleEncoding
 
         Task status = bitmovinApi.encoding.getStatus(encoding);
 
-        while (status.getStatus() != Status.FINISHED && status.getStatus() != Status.ERROR)
-        {
+        while (status.getStatus() != Status.FINISHED && status.getStatus() != Status.ERROR) {
             status = bitmovinApi.encoding.getStatus(encoding);
             Thread.sleep(2500);
         }
 
         System.out.println(String.format("Encoding finished with status %s", status.getStatus().toString()));
 
-        if (status.getStatus() != Status.FINISHED)
-        {
+        if (status.getStatus() != Status.FINISHED) {
             System.out.println("Encoding has status error ... can not create manifest");
             return;
         }
@@ -227,13 +238,11 @@ public class CreateSimpleEncoding
 
         bitmovinApi.manifest.dash.startGeneration(manifest);
         Status dashStatus = bitmovinApi.manifest.dash.getGenerationStatus(manifest);
-        while (dashStatus != Status.FINISHED && dashStatus != Status.ERROR)
-        {
+        while (dashStatus != Status.FINISHED && dashStatus != Status.ERROR) {
             dashStatus = bitmovinApi.manifest.dash.getGenerationStatus(manifest);
             Thread.sleep(2500);
         }
-        if (dashStatus != Status.FINISHED)
-        {
+        if (dashStatus != Status.FINISHED) {
             System.out.println("Could not create DASH manifest");
             return;
         }
@@ -257,21 +266,19 @@ public class CreateSimpleEncoding
         audioMediaInfo.setSegmentPath("audio/128kbps_hls");
         bitmovinApi.manifest.hls.createMediaInfo(manifestHls, audioMediaInfo);
 
-        this.addStreamInfoToHlsManifest("video_1080p.m3u8", encoding.getId(), videoStream1080p.getId(), tsMuxing1080.getId(), "audio","video/1080p_hls", manifestHls);
-        this.addStreamInfoToHlsManifest("video_720p.m3u8", encoding.getId(), videoStream720p.getId(), tsMuxing720.getId(), "audio","video/720p_hls", manifestHls);
-        this.addStreamInfoToHlsManifest("video_480p.m3u8", encoding.getId(), videoStream480p.getId(), tsMuxing480.getId(), "audio","video/480p_hls", manifestHls);
-        this.addStreamInfoToHlsManifest("video_360p.m3u8", encoding.getId(), videoStream360p.getId(), tsMuxing360.getId(), "audio","video/360p_hls", manifestHls);
-        this.addStreamInfoToHlsManifest("video_240p.m3u8", encoding.getId(), videoStream240p.getId(), tsMuxing240.getId(), "audio","video/240p_hls", manifestHls);
+        this.addStreamInfoToHlsManifest("video_1080p.m3u8", encoding.getId(), videoStream1080p.getId(), tsMuxing1080.getId(), "audio", "video/1080p_hls", manifestHls);
+        this.addStreamInfoToHlsManifest("video_720p.m3u8", encoding.getId(), videoStream720p.getId(), tsMuxing720.getId(), "audio", "video/720p_hls", manifestHls);
+        this.addStreamInfoToHlsManifest("video_480p.m3u8", encoding.getId(), videoStream480p.getId(), tsMuxing480.getId(), "audio", "video/480p_hls", manifestHls);
+        this.addStreamInfoToHlsManifest("video_360p.m3u8", encoding.getId(), videoStream360p.getId(), tsMuxing360.getId(), "audio", "video/360p_hls", manifestHls);
+        this.addStreamInfoToHlsManifest("video_240p.m3u8", encoding.getId(), videoStream240p.getId(), tsMuxing240.getId(), "audio", "video/240p_hls", manifestHls);
 
         bitmovinApi.manifest.hls.startGeneration(manifestHls);
         Status hlsStatus = bitmovinApi.manifest.hls.getGenerationStatus(manifestHls);
-        while (hlsStatus != Status.FINISHED && hlsStatus != Status.ERROR)
-        {
+        while (hlsStatus != Status.FINISHED && hlsStatus != Status.ERROR) {
             hlsStatus = bitmovinApi.manifest.hls.getGenerationStatus(manifestHls);
             Thread.sleep(2500);
         }
-        if (hlsStatus != Status.FINISHED)
-        {
+        if (hlsStatus != Status.FINISHED) {
             System.out.println("Could not create HLS manifest");
             return;
         }
@@ -280,8 +287,7 @@ public class CreateSimpleEncoding
     }
 
     private StreamInfo addStreamInfoToHlsManifest(String uri, String encodingId, String streamId, String muxingId,
-                                                  String audioGroupId, String segmentPath, HlsManifest manifest) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException
-    {
+                                                  String audioGroupId, String segmentPath, HlsManifest manifest) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException {
         StreamInfo s = new StreamInfo();
         s.setUri(uri);
         s.setEncodingId(encodingId);
@@ -294,8 +300,7 @@ public class CreateSimpleEncoding
     }
 
 
-    private HlsManifest createHlsManifest(String name, EncodingOutput output) throws URISyntaxException, BitmovinApiException, UnirestException, IOException
-    {
+    private HlsManifest createHlsManifest(String name, EncodingOutput output) throws URISyntaxException, BitmovinApiException, UnirestException, IOException {
         HlsManifest m = new HlsManifest();
         m.setName(name);
         m.addOutput(output);
@@ -304,8 +309,7 @@ public class CreateSimpleEncoding
 
     private void addDashRepresentationToAdaptationSet(DashMuxingType type, String encodingId, String muxingId,
                                                       String segmentPath, DashManifest manifest, Period period,
-                                                      AdaptationSet adaptationSet) throws BitmovinApiException, URISyntaxException, RestException, UnirestException, IOException
-    {
+                                                      AdaptationSet adaptationSet) throws BitmovinApiException, URISyntaxException, RestException, UnirestException, IOException {
         DashFmp4Representation r = new DashFmp4Representation();
         r.setType(type);
         r.setEncodingId(encodingId);
@@ -314,21 +318,16 @@ public class CreateSimpleEncoding
         bitmovinApi.manifest.dash.addRepresentationToAdaptationSet(manifest, period, adaptationSet, r);
     }
 
-    private AudioAdaptationSet addAudioAdaptationSetToPeriodWithRoles(DashManifest manifest, Period period, String lang) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException
-    {
+    private AudioAdaptationSet addAudioAdaptationSetToPeriodWithRoles(DashManifest manifest, Period period, String lang) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException {
         AudioAdaptationSet a = new AudioAdaptationSet();
         a.setLang(lang);
         a = bitmovinApi.manifest.dash.addAudioAdaptationSetToPeriod(manifest, period, a);
         return a;
     }
 
-    private AudioAdaptationSet addAudioAdaptationSet(DashManifest manifest, Period period, AudioAdaptationSet audioAdaptationSet)
-    {
-        try
-        {
-        }
-        catch (Exception e)
-        {
+    private AudioAdaptationSet addAudioAdaptationSet(DashManifest manifest, Period period, AudioAdaptationSet audioAdaptationSet) {
+        try {
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
 
@@ -337,15 +336,13 @@ public class CreateSimpleEncoding
         return audioAdaptationSet;
     }
 
-    private VideoAdaptationSet addVideoAdaptationSetToPeriod(DashManifest manifest, Period period) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException
-    {
+    private VideoAdaptationSet addVideoAdaptationSetToPeriod(DashManifest manifest, Period period) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException {
         VideoAdaptationSet adaptationSet = new VideoAdaptationSet();
         adaptationSet = bitmovinApi.manifest.dash.addVideoAdaptationSetToPeriod(manifest, period, adaptationSet);
         return adaptationSet;
     }
 
-    private DashManifest createDashManifest(String name, EncodingOutput output) throws URISyntaxException, BitmovinApiException, UnirestException, IOException
-    {
+    private DashManifest createDashManifest(String name, EncodingOutput output) throws URISyntaxException, BitmovinApiException, UnirestException, IOException {
         DashManifest manifest = new DashManifest();
         manifest.setName(name);
         manifest.addOutput(output);
@@ -353,25 +350,20 @@ public class CreateSimpleEncoding
         return manifest;
     }
 
-    private Period addPeriodToDashManifest(DashManifest manifest) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException
-    {
+    private Period addPeriodToDashManifest(DashManifest manifest) throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException {
         Period period = new Period();
         period = bitmovinApi.manifest.dash.createPeriod(manifest, period);
         return period;
     }
 
-    private EncodingOutput createEncodingOutput(Output output, String outputPath, AclPermission defaultAclPermission)
-    {
+    private EncodingOutput createEncodingOutput(Output output, String outputPath, AclPermission defaultAclPermission) {
         EncodingOutput encodingOutput = new EncodingOutput();
         encodingOutput.setOutputPath(outputPath);
         encodingOutput.setOutputId(output.getId());
 
-        if (output.getAcl() != null && output.getAcl().size() > 0)
-        {
+        if (output.getAcl() != null && output.getAcl().size() > 0) {
             encodingOutput.setAcl(output.getAcl());
-        }
-        else
-        {
+        } else {
             ArrayList<AclEntry> aclEntries = new ArrayList<>();
             aclEntries.add(new AclEntry(defaultAclPermission));
             encodingOutput.setAcl(aclEntries);
@@ -381,8 +373,7 @@ public class CreateSimpleEncoding
     }
 
     private FMP4Muxing createFMP4Muxing(Encoding encoding, Stream stream, Output output, String outputPath, AclPermission defaultAclPermission)
-            throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException
-    {
+            throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException {
         EncodingOutput encodingOutput = this.createEncodingOutput(output, outputPath, defaultAclPermission);
         FMP4Muxing muxing = new FMP4Muxing();
         muxing.addOutput(encodingOutput);
@@ -395,8 +386,7 @@ public class CreateSimpleEncoding
     }
 
     private TSMuxing createTSMuxing(Encoding encoding, Stream stream, Output output, String outputPath, AclPermission defaultAclPermission)
-            throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException
-    {
+            throws URISyntaxException, BitmovinApiException, RestException, UnirestException, IOException {
         EncodingOutput encodingOutput = this.createEncodingOutput(output, outputPath, defaultAclPermission);
         TSMuxing muxing = new TSMuxing();
         muxing.addOutput(encodingOutput);
