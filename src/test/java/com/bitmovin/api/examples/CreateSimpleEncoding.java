@@ -46,9 +46,11 @@ import org.junit.Test;
 
 /**
  * Created by Roland Kersche on 01.06.17.
+ * Modified by Brian Tsang on 31.05.17.
  */
 public class CreateSimpleEncoding {
     private static String ApiKey = "d8e098d1-85e3-4b49-aa13-f8ac8acb443c";
+    private static String ENCODING_JOB_NAME = "Java MultiCodec example " + new Date().getTime();
 
     private static CloudRegion cloudRegion = CloudRegion.AWS_EU_WEST_1;
 
@@ -63,7 +65,7 @@ public class CreateSimpleEncoding {
     // private static String S3_OUTPUT_BUCKET_NAME = "bitmovin-encode-outputs";
 
     private static String S3_OUTPUT_ID = "a3881e62-03f5-482b-8f8a-6ac8603f0c83";
-    private static String OUTPUT_BASE_PATH = "outputs/" + new Date().getTime() + "/";
+    private static String OUTPUT_BASE_PATH = "outputs/" + ENCODING_JOB_NAME + new Date().getTime() + "/";
 
     private static String AAC_CONFIGURATION_ID = "75ca5002-8421-4f45-ac43-81b769cbac85";
     private static String VIDEO_CONFIGURATION_240P = "117fdc8a-0ba1-4167-aec8-04b4a68f6621";
@@ -79,7 +81,7 @@ public class CreateSimpleEncoding {
         bitmovinApi = new BitmovinApi(ApiKey);
 
         Encoding encoding = new Encoding();
-        encoding.setName("Encoding JAVA");
+        encoding.setName("Encoding JAVA " + ENCODING_JOB_NAME);
         encoding.setCloudRegion(cloudRegion);
         encoding = bitmovinApi.encoding.create(encoding);
 
